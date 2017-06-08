@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<routes xmlns="http://symfony.com/schema/routing"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://symfony.com/schema/routing http://symfony.com/schema/routing/routing-1.0.xsd">
+
+    <route id="admin.recaptcha.config" path="/admin/module/ReCaptcha">
+        <default key="_controller">ReCaptcha\Controller\ConfigurationController::viewAction</default>
+    </route>
+
+    <route id="admin.recaptcha.config.save" path="/admin/module/recaptcha/configuration" methods="POST">
+        <default key="_controller">ReCaptcha\Controller\ConfigurationController::saveAction</default>
+    </route>
+
+</routes>
