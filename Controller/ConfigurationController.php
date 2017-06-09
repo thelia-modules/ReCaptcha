@@ -30,7 +30,6 @@ class ConfigurationController extends BaseAdminController
 
             ReCaptcha::setConfigValue('site_key', $data['site_key']);
             ReCaptcha::setConfigValue('secret_key', $data['secret_key']);
-            ReCaptcha::setConfigValue('captcha_method', $data['captcha_method']);
 
         } catch (\Exception $e) {
             $this->setupFormErrorContext(

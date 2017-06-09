@@ -1,6 +1,6 @@
 # Re Captcha
 
-This module allow you to add easily a reCAPTCHA to yout form
+This module allow you to add easily a reCAPTCHA to your form
 ## Installation
 
 ### Composer
@@ -19,7 +19,7 @@ then you'll need help from a developer to add some hooks in template and dispatc
 
 ### Hook
 
-First if you don't have `{hook name="main.head-top"}` hook in your template you have to put a hook `{hook name="recaptcha.js"}` in the top of your head
+First if you don't have `{hook name="main.head-top"}` hook in your template you have to put this hook `{hook name="recaptcha.js"}` in the top of your head
 After that you have the choice between two type of captcha :
 
 1) A standard captcha
