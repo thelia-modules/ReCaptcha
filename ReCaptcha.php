@@ -32,6 +32,16 @@ class ReCaptcha extends BaseModule
         return [
             [
                 "type" => TemplateDefinition::FRONT_OFFICE,
+                "code" => "recaptcha.js",
+                "title" => [
+                    "en_US" => "reCaptcha js",
+                    "fr_FR" => "Js pour recaptcha",
+                ],
+                "block" => false,
+                "active" => true,
+            ],
+            [
+                "type" => TemplateDefinition::FRONT_OFFICE,
                 "code" => "recaptcha.v2.button",
                 "title" => [
                     "en_US" => "reCaptcha v2 button",
