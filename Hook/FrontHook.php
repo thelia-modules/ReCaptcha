@@ -10,17 +10,18 @@ use Thelia\Core\Hook\BaseHook;
 
 class FrontHook extends BaseHook
 {
-    public function onRecaptchaV2Button(HookRenderEvent $event)
+    public function addRecaptchaCheck(HookRenderEvent $event)
     {
         $siteKey = ReCaptcha::getConfigValue('site_key');
+        $captchaStyle = ReCaptcha::getConfigValue('captcha_style');
 
-        $event->add("<div class='g-recaptcha' data-sitekey='$siteKey'></div>");
-    }
+        $captchaId= "recaptcha";
+        $captchaCallback = "";
+        if ($captchaStyle === 'invisible') {
+            $captchaCallback = "data-callback='onCompleted'";
+            $captchaId = $captchaId.'-invisible';
+        }
 
-    public function onRecaptchaInvisibleButton(HookRenderEvent $event)
-    {
-        $siteKey = ReCaptcha::getConfigValue('site_key');
-
-        $event->add(" data-sitekey='$siteKey' data-callback='onCaptchaSubmit' ");
+        $event->add("<div id='$captchaId' class='g-recaptcha' data-sitekey='$siteKey' $captchaCallback data-size='$captchaStyle'></div>");
     }
 }

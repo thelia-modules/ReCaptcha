@@ -30,6 +30,21 @@ class ConfigurationForm extends BaseForm
                     "label_attr" => ["for" => "secret_key"],
                     "required" => true
                 ]
+            )
+            ->add(
+                "captcha_style",
+                "choice",
+                [
+                    "data" => ReCaptcha::getConfigValue("captcha_style"),
+                    "label"=>Translator::getInstance()->trans("ReCaptcha style", array(), ReCaptcha::DOMAIN_NAME),
+                    "label_attr" => ["for" => "captcha_style"],
+                    "required" => true,
+                    'choices'  => [
+                        'normal'=>'Normal',
+                        'compact'=>'Compact',
+                        'invisible'=>'Invisible'
+                    ]
+                ]
             );
     }
 

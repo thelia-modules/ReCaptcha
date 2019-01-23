@@ -1,6 +1,21 @@
-<script src="https://www.google.com/recaptcha/api.js?hl={lang attr="code"}"></script>
+<script src="https://www.google.com/recaptcha/api.js?hl={lang attr="code"}" async defer></script>
 <script>
-    function onCaptchaSubmit(token) {
-        document.getElementsByClassName("captcha-form")[0].submit();
+    window.onload = function() {
+        var captchaDiv = document.getElementById("recaptcha-invisible");
+        console.log(captchaDiv);
+        if (captchaDiv !== null) {
+            var form = captchaDiv.parentElement;
+
+            form.addEventListener("submit", function(event) {
+                if (!grecaptcha.getResponse()) {
+                    event.preventDefault(); //prevent form submit
+                    grecaptcha.execute();
+                }
+            });
+
+            onCompleted = function() {
+                form.submit();
+            }
+        }
     }
 </script>

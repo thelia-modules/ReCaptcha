@@ -42,24 +42,14 @@ class ReCaptcha extends BaseModule
             ],
             [
                 "type" => TemplateDefinition::FRONT_OFFICE,
-                "code" => "recaptcha.v2.button",
+                "code" => "recaptcha.check",
                 "title" => [
-                    "en_US" => "reCaptcha v2 button",
-                    "fr_FR" => "Bouton reCaptcha v2",
+                    "en_US" => "reCaptcha check hook",
+                    "fr_FR" => "reCaptcha check hook",
                 ],
                 "block" => false,
                 "active" => true,
             ],
-            [
-                "type" => TemplateDefinition::FRONT_OFFICE,
-                "code" => "recaptcha.invisible.button",
-                "title" => [
-                    "en_US" => "reCaptcha invisible button",
-                    "fr_FR" => "Bouton reCaptcha invisible",
-                ],
-                "block" => false,
-                "active" => true,
-            ]
         ];
     }
 }

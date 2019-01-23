@@ -31,8 +31,7 @@
         <hook id="recaptcha.hook" class="ReCaptcha\Hook\FrontHook">
             <tag name="hook.event_listener" event="main.head-top" type="front" templates="render:recaptcha-js.html" />
             <tag name="hook.event_listener" event="recaptcha.js" type="front" templates="render:recaptcha-js.html" />
-            <tag name="hook.event_listener" event="recaptcha.v2.button" type="front" method="onRecaptchaV2Button" />
-            <tag name="hook.event_listener" event="recaptcha.invisible.button" type="front" method="onRecaptchaInvisibleButton" />
+            <tag name="hook.event_listener" event="recaptcha.check" type="front" method="addRecaptchaCheck" />
         </hook>
     </hooks>
 
