@@ -54,3 +54,9 @@ if ($checkCaptchaEvent->isHuman() == false) {
     throw new \Exception('Invalid captcha');
 }
 ```
+   
+Don't forget to add this use at the top of your class :   
+```
+use ReCaptcha\Event\ReCaptchaCheckEvent;   
+use ReCaptcha\Event\ReCaptchaEvents;
+```
