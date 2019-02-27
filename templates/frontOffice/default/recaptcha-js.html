@@ -13,7 +13,9 @@
             });
 
             onCompleted = function() {
-                form.submit();
+                if (form.reportValidity() !== false) {
+                    form.submit();
+                }
             }
         }
     }
