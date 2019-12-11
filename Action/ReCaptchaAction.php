@@ -26,22 +26,29 @@ class ReCaptchaAction implements EventSubscriberInterface
         $requestUrl .= "?secret=$secretKey";
 
         $captchaResponse = $event->getCaptchaResponse();
-        if (null == $captchaResponse) {
+
+        if (null === $captchaResponse) {
             $captchaResponse = $this->request->request->get('g-recaptcha-response');
         }
 
-        $requestUrl .= "&response=$captchaResponse";
+        if (null !== $captchaResponse) {
+            $requestUrl .= "&response=$captchaResponse";
 
-        $remoteIp = $event->getRemoteIp();
-        if (null == $remoteIp) {
-            $remoteIp = $this->request->server->get('REMOTE_ADDR');
-        }
+            $remoteIp = $event->getRemoteIp();
 
-        $requestUrl .= "&remoteip=$remoteIp";
+            if (null === $remoteIp) {
+                $remoteIp = $this->request->server->get('REMOTE_ADDR');
+            }
 
-        $result = json_decode(file_get_contents($requestUrl), true);
+            $requestUrl .= "&remoteip=$remoteIp";
 
-        if ($result['success'] == true) {
+            $result = json_decode(file_get_contents($requestUrl), true);
+
+            if ((bool) $result['success'] === true) {
+                $event->setHuman(true);
+            }
+        } else {
+            // No captcha in form -> consider user as human.
             $event->setHuman(true);
         }
     }
