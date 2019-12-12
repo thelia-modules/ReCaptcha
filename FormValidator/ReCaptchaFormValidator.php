@@ -47,6 +47,6 @@ class ReCaptchaFormValidator extends TheliaFormValidator
             throw new FormValidationException($this->translator->trans("Sorry, it seems that you're not human.", [], ReCaptcha::DOMAIN_NAME));
         }
 
-        parent::validateForm($aBaseForm, $expectedMethod);
+        return parent::validateForm($aBaseForm, $expectedMethod);
     }
 }
