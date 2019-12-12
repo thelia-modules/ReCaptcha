@@ -25,6 +25,12 @@
             <tag name="kernel.event_subscriber" />
             <argument type="service" id="request"/>
         </service>
+
+        <service id="thelia.form_validator" class="ReCaptcha\FormValidator\ReCaptchaFormValidator">
+            <argument type="service" id="event_dispatcher" />
+            <argument type="service" id="thelia.translator" />
+            <argument>%kernel.environment%</argument>
+        </service>
     </services>
 
     <hooks>
