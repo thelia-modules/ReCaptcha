@@ -2,6 +2,7 @@
 
 namespace ReCaptcha\Controller;
 
+use ReCaptcha\Form\ConfigurationForm;
 use ReCaptcha\ReCaptcha;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
@@ -23,7 +24,7 @@ class ConfigurationController extends BaseAdminController
             return $response;
         }
 
-        $form = $this->createForm("recaptcha_configuration.form");
+        $form = $this->createForm(ConfigurationForm::getName());
 
         try {
             $data = $this->validateForm($form)->getData();

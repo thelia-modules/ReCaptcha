@@ -7,15 +7,16 @@ use ReCaptcha\Event\ReCaptchaEvents;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class ReCaptchaAction implements EventSubscriberInterface
 {
     /** @var  Request */
     protected $request;
 
-    public function __construct(Request $request)
+    public function __construct(RequestStack $requestStack)
     {
-        $this->request = $request;
+        $this->request = $requestStack->getCurrentRequest();
     }
 
     public function checkCaptcha(ReCaptchaCheckEvent $event)

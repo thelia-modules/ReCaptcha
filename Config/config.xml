@@ -11,7 +11,7 @@
     </loops>
 
     <forms>
-        <form name="recaptcha_configuration.form" class="ReCaptcha\Form\ConfigurationForm" />
+        <form name="recaptcha_configuration_form" class="ReCaptcha\Form\ConfigurationForm" />
     </forms>
 
     <commands>
@@ -19,13 +19,6 @@
         <command class="ReCaptcha\Command\MySuperCommand" />
         -->
     </commands>
-
-    <services>
-        <service id="recpatcha.action" class="ReCaptcha\Action\ReCaptchaAction">
-            <tag name="kernel.event_subscriber" />
-            <argument type="service" id="request"/>
-        </service>
-    </services>
 
     <hooks>
         <hook id="recaptcha.hook" class="ReCaptcha\Hook\FrontHook">

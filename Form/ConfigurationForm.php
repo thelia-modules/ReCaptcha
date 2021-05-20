@@ -3,6 +3,8 @@
 namespace ReCaptcha\Form;
 
 use ReCaptcha\ReCaptcha;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
 
@@ -13,7 +15,7 @@ class ConfigurationForm extends BaseForm
         $this->formBuilder
             ->add(
                 "site_key",
-                "text",
+                TextType::class,
                 [
                     "data" => ReCaptcha::getConfigValue("site_key"),
                     "label"=>Translator::getInstance()->trans("Site key", array(), ReCaptcha::DOMAIN_NAME),
@@ -23,7 +25,7 @@ class ConfigurationForm extends BaseForm
             )
             ->add(
                 "secret_key",
-                "text",
+                TextType::class,
                 [
                     "data" => ReCaptcha::getConfigValue("secret_key"),
                     "label"=>Translator::getInstance()->trans("Secret key", array(), ReCaptcha::DOMAIN_NAME),
@@ -33,22 +35,22 @@ class ConfigurationForm extends BaseForm
             )
             ->add(
                 "captcha_style",
-                "choice",
+                ChoiceType::class,
                 [
                     "data" => ReCaptcha::getConfigValue("captcha_style"),
                     "label"=>Translator::getInstance()->trans("ReCaptcha style", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "captcha_style"],
                     "required" => true,
                     'choices'  => [
-                        'normal'=>'Normal',
-                        'compact'=>'Compact',
-                        'invisible'=>'Invisible'
+                        'Normal'=>'normal',
+                        'Compact'=>'compact',
+                        'Invisible'=>'invisible'
                     ]
                 ]
             );
     }
 
-    public function getName()
+    public static function getName()
     {
         return "recaptcha_configuration_form";
     }

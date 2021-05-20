@@ -45,7 +45,7 @@ be careful if you want to use the invisible captcha this hook must be placed dir
 To check in server-side if the captcha is valid you have to dispatch the "CHECK_CAPTCHA_EVENT" like this :
 ```
 $checkCaptchaEvent = new ReCaptchaCheckEvent();
-$this->dispatch(ReCaptchaEvents::CHECK_CAPTCHA_EVENT, $checkCaptchaEvent);
+$eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
 ```
 
 Then the result of check is available in `$checkCaptchaEvent->isHuman()`as boolean so you can do a test like this :
