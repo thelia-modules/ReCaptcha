@@ -1,6 +1,6 @@
 # Re Captcha
 
-This module allow you to add easily a reCAPTCHA to your form
+This module allows you to add easily a reCAPTCHA to your form
 ## Installation
 
 ### Composer
