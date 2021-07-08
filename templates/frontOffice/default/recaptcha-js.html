@@ -1,7 +1,7 @@
 <script src="https://www.google.com/recaptcha/api.js?hl={lang attr='code'}" async defer></script>
 <script>
     window.onload = function () {
-        var captchaDiv = document.querySelector(".g-recaptcha");
+        var captchaDiv = document.querySelector(".g-recaptcha.g-invisible");
 
         if (captchaDiv !== null) {
             var form = captchaDiv.parentElement;

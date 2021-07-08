@@ -16,8 +16,11 @@ class FrontHook extends BaseHook
 
         $captchaId= "recaptcha";
         $captchaCallback = "";
+        $type = "";
+
         if ($captchaStyle === 'invisible') {
             $captchaCallback = "data-callback='onCompleted'";
+            $type = "g-invisble";
             $captchaId = $captchaId.'-invisible';
         }
 
@@ -25,6 +28,6 @@ class FrontHook extends BaseHook
             $captchaId = $event->getArgument('id');
         }
 
-        $event->add("<div id='$captchaId' class='g-recaptcha' data-sitekey='$siteKey' $captchaCallback data-size='$captchaStyle'></div>");
+        $event->add("<div id='$captchaId' class='g-recaptcha $type' data-sitekey='$siteKey' $captchaCallback data-size='$captchaStyle'></div>");
     }
 }
