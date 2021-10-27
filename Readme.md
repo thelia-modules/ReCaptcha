@@ -8,7 +8,7 @@ This module allow you to add easily a reCAPTCHA to your form
 Add it in your main thelia composer.json file
 
 ```
-composer require thelia/re-captcha-module:~2.0.0
+composer require thelia/re-captcha-module:~2.0.3
 ```
 
 ## Usage
@@ -25,8 +25,11 @@ and choose which style of captcha you want :
  
     ![Invisible captcha](https://developers.google.com/recaptcha/images/invisible_badge.png)
 
+If you're using Thelia 2.4 or better, you can automatically add a CAPTCHA to the standard Thelia
+contact form. To do so, just check the "Add captcha to standard contact form" box in the module
+configuration.
 
-Then you'll need help from a developer to add some hooks in template and dispatch the check events, see details below.
+For thelia 2.3, you'll need help from a developer to add some hooks in template and dispatch the check events, see details below.
 
 ### Hook
 

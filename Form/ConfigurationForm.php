@@ -46,6 +46,25 @@ class ConfigurationForm extends BaseForm
                     ]
                 ]
             );
+
+        if (defined('\Thelia\Core\Event\TheliaEvents::CONTACT_SUBMIT')) {
+            $this->formBuilder
+                ->add(
+                    "add_to_contact_form",
+                    "checkbox",
+                    [
+                        "required" => false,
+                        "data" => (bool) ReCaptcha::getConfigValue("add_to_contact_form"),
+                        "value" => 1,
+                        "label" => $this->translator->trans("Add captcha to standard contact form", [], ReCaptcha::DOMAIN_NAME),
+                        "label_attr" => [
+                            "for" => "add_to_contact_form",
+                             'help' => $this->translator->trans("Check this box to add a captcha to the standard Thelia 2 contact form", [], ReCaptcha::DOMAIN_NAME)
+                        ],
+
+                    ]
+                );
+        }
     }
 
     public function getName()

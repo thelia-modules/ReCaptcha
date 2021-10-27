@@ -1,69 +1,48 @@
-{extends file="admin-layout.tpl"}
-
-{block name="after-bootstrap-css"}
-    <style>
-        .recaptcha_radio {
-            cursor: pointer;
-        }
-    </style>
-{/block}
-
-{block name="no-return-functions"}
-    {$admin_current_location = 'module'}
-{/block}
-
-{block name="page-title"}{intl l='ReCaptcha module configuration' d='recaptcha.bo.default'}{/block}
-
-{block name="check-resource"}admin.module{/block}
-{block name="check-access"}view{/block}
-{block name="check-module"}ReCaptcha{/block}
-
-{block name="main-content"}
-    <div class="col-md-12">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    {intl l="ReCaptcha configuration" d='recaptcha.bo.default'}
-                </h4>
+<div class="row">
+    <div class="col-md-12 general-block-decorator">
+        <div class="row">
+            <div class="col-md-12 title title-without-tabs">
+                {intl d='payzen.bo.default' l="reCAPTCHA Configuration" d='recaptcha.bo.default'}
             </div>
-            {form name="recaptcha_configuration.form"}
-                <form action="{url path="/admin/module/recaptcha/configuration"}" method="post">
-                    {form_hidden_fields form=$form}
+        </div>
 
-                    {if $form_error}
-                        <div class="alert alert-danger">{$form_error_message}</div>
-                    {/if}
+        <div class="form-container">
+            <div class="row">
+                <div class="col-md-12">
+                    {form name="recaptcha_configuration.form"}
+                    <form action="{url path="/admin/module/recaptcha/configuration"}" method="post">
+                        {form_hidden_fields form=$form}
 
-                    {form_field form=$form field='success_url'}
-                        <input type="hidden" name="{$name}" value="{url path={navigate to="current"}}"/>
-                    {/form_field}
+                        {if $form_error}
+                            <div class="alert alert-danger">{$form_error_message}</div>
+                        {/if}
 
-                    <div class="panel-body">
+                        {include file = "includes/inner-form-toolbar.html"
+                            hide_flags = true
+                            page_url   = "{url path='/admin/module/ReCaptcha'}"
+                            close_url  = "{url path='/admin/modules'}"
+                        }
+
                         <div class="row">
-                            <h3 class="col-md-12">{intl l="reCAPTCHA access :" d='recaptcha.bo.default'}</h3>
                             <div class="col-md-6">
-                                {render_form_field form=$form field="site_key" value={$data}}
-                            </div>
-                            <div class="col-md-6">
-                                {render_form_field form=$form field="secret_key" value={$data}}
-                            </div>
-                            <div class="col-md-12">
-                                {render_form_field form=$form field="captcha_style" value={$data}}
-                            </div>
-                            <div class="col-md-12">
+                                {render_form_field field="site_key" }
+                                {render_form_field field="secret_key"}
                                 <p>{intl l="These infos are available here : " d='recaptcha.bo.default'}<a href="http://www.google.com/recaptcha/admin">http://www.google.com/recaptcha/admin</a></p>
                             </div>
-                            <div class="col-md-12">
-                                <input type="submit" class="btn btn-success form-control">
+
+                            <div class="col-md-6">
+                                {render_form_field field="captcha_style"}
+
+                                {if $with_contact_form}
+                                    <label></label>
+                                    {render_form_field field="add_to_contact_form"}
+                                {/if}
                             </div>
                         </div>
-                    </div>
-                </form>
-            {/form}
+                    </form>
+                    {/form}
+                </div>
+            </div>
         </div>
     </div>
-{/block}
-
-{block name="javascript-initialization"}
-
-{/block}
+</div>
