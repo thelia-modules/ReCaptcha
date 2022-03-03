@@ -22,8 +22,8 @@
 
     <hooks>
         <hook id="recaptcha.hook" class="ReCaptcha\Hook\FrontHook">
-            <tag name="hook.event_listener" event="main.head-top" type="front" templates="render:recaptcha-js.html" />
-            <tag name="hook.event_listener" event="recaptcha.js" type="front" templates="render:recaptcha-js.html" />
+            <tag name="hook.event_listener" event="main.head-top" type="front" method="loadRecaptcha" />
+            <tag name="hook.event_listener" event="recaptcha.js" type="front" method="loadRecaptcha" />
             <tag name="hook.event_listener" event="recaptcha.check" type="front" method="addRecaptchaCheck" />
         </hook>
     </hooks>
