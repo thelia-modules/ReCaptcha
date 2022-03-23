@@ -1,18 +1,19 @@
-<script src="https://www.google.com/recaptcha/api.js?hl={lang attr="code"}" async defer></script>
+<script src="https://www.google.com/recaptcha/api.js?hl={lang attr='code'}" async defer></script>
 <script>
     window.onload = function() {
-        var captchaDiv = document.getElementById("recaptcha-invisible");
+        var captchaDiv = document.querySelector(".g-recaptcha.g-invisible");
+
         if (captchaDiv !== null) {
             var form = captchaDiv.parentElement;
 
-            form.addEventListener("submit", function(event) {
+            form.addEventListener("submit", function (event) {
                 if (!grecaptcha.getResponse()) {
                     event.preventDefault(); //prevent form submit
                     grecaptcha.execute();
                 }
             });
 
-            onCompleted = function() {
+            onCompleted = function () {
                 if (form.reportValidity() !== false) {
                     form.submit();
                 }
