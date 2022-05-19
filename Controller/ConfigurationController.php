@@ -11,13 +11,6 @@ use Thelia\Core\Translation\Translator;
 
 class ConfigurationController extends BaseAdminController
 {
-    public function viewAction()
-    {
-        return $this->render(
-            "recaptcha/configuration"
-        );
-    }
-
     public function saveAction()
     {
         if (null !== $response = $this->checkAuth(array(AdminResources::MODULE), 'ReCaptcha', AccessManager::VIEW)) {
