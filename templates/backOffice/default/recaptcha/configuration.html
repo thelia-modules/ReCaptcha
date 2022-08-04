@@ -51,6 +51,9 @@
                                 {render_form_field form=$form field="captcha_style" value={$data}}
                             </div>
                             <div class="col-md-12">
+                                {render_form_field form=$form field="min_score" value={$data}}
+                            </div>
+                            <div class="col-md-12">
                                 <p>{intl l="These infos are available here : " d='recaptcha.bo.default'}<a href="http://www.google.com/recaptcha/admin">http://www.google.com/recaptcha/admin</a></p>
                             </div>
                             <div class="col-md-12">

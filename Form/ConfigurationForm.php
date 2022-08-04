@@ -4,9 +4,11 @@ namespace ReCaptcha\Form;
 
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
+
 
 class ConfigurationForm extends BaseForm
 {
@@ -31,6 +33,21 @@ class ConfigurationForm extends BaseForm
                     "label"=>Translator::getInstance()->trans("Secret key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "secret_key"],
                     "required" => true
+                ]
+            )
+            ->add(
+                "min_score",
+                NumberType::class,
+                [
+                    "data" => ReCaptcha::getConfigValue("min_score"),
+                    "label"=>Translator::getInstance()->trans("Captcha minimum score", array(), ReCaptcha::DOMAIN_NAME),
+                    "label_attr" => ["for" => "min_score"],
+                    "required" => true,
+                    "attr" => [
+                        "min" => 0.1,
+                        "max" => 1,
+                        "step" => 0.1
+                    ]
                 ]
             )
             ->add(

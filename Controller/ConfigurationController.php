@@ -31,6 +31,7 @@ class ConfigurationController extends BaseAdminController
 
             ReCaptcha::setConfigValue('site_key', $data['site_key']);
             ReCaptcha::setConfigValue('secret_key', $data['secret_key']);
+            ReCaptcha::setConfigValue('min_score', $data['min_score']);
             ReCaptcha::setConfigValue('captcha_style', $data['captcha_style']);
 
         } catch (\Exception $e) {

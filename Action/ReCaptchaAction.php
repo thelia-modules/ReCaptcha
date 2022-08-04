@@ -24,6 +24,7 @@ class ReCaptchaAction implements EventSubscriberInterface
         $requestUrl = "https://www.google.com/recaptcha/api/siteverify";
 
         $secretKey = ReCaptcha::getConfigValue('secret_key');
+        $minScore = ReCaptcha::getConfigValue('min_score', 0.3);
         $requestUrl .= "?secret=$secretKey";
 
         $captchaResponse = $event->getCaptchaResponse();
@@ -41,8 +42,7 @@ class ReCaptchaAction implements EventSubscriberInterface
         $requestUrl .= "&remoteip=$remoteIp";
 
         $result = json_decode(file_get_contents($requestUrl), true);
-
-        if ($result['success'] == true) {
+        if ($result['success'] == true && $result['score'] > $minScore) {
             $event->setHuman(true);
         }
     }
