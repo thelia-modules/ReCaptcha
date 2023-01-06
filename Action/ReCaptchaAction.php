@@ -42,7 +42,7 @@ class ReCaptchaAction implements EventSubscriberInterface
         $requestUrl .= "&remoteip=$remoteIp";
 
         $result = json_decode(file_get_contents($requestUrl), true);
-        if ($result['success'] == true && $result['score'] > $minScore) {
+        if ($result['success'] == true && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
             $event->setHuman(true);
         }
     }
