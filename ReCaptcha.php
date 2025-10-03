@@ -28,7 +28,7 @@ class ReCaptcha extends BaseModule
      * Have fun !
      */
 
-    public function getHooks()
+    public function getHooks() : array
     {
         return [
             [
