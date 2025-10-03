@@ -67,7 +67,7 @@ class ConfigurationForm extends BaseForm
             );
     }
 
-    public static function getName()
+    public static function getName() : string
     {
         return "recaptcha_configuration_form";
     }

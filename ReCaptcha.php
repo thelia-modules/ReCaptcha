@@ -20,7 +20,7 @@ class ReCaptcha extends BaseModule
 {
     /** @var string */
     const DOMAIN_NAME = 'recaptcha';
-
+    const RECAPTCHA_API_URL = 'https://www.google.com/recaptcha/api.js';
     /*
      * You may now override BaseModuleInterface methods, such as:
      * install, destroy, preActivation, postActivation, preDeactivation, postDeactivation
@@ -28,7 +28,7 @@ class ReCaptcha extends BaseModule
      * Have fun !
      */
 
-    public function getHooks()
+    public function getHooks() : array
     {
         return [
             [
