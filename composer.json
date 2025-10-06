@@ -1,5 +1,8 @@
 {
   "name": "thelia/re-captcha-module",
+  "keywords": [
+    "symfony-ux"
+  ],
   "description": "This module allows you to add easily a reCAPTCHA to your form",
   "license": "LGPL-3.0+",
   "type": "thelia-module",

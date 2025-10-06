@@ -1,0 +1,19 @@
+{
+    "name": "@thelia/recaptacha",
+    "version": "1.0.0",
+    "symfony": {
+        "controllers": {
+            "recaptacha": {
+                "main": "controller/recaptacha_controller.js",
+                "fetch": "eager",
+                "enabled": true
+            }
+        },
+        "importmap": {
+            "@hotwired/stimulus": "^3.0.0"
+        }
+    },
+    "peerDependencies": {
+        "@hotwired/stimulus": "^3.0.0"
+    }
+}
