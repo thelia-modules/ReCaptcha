@@ -7,26 +7,25 @@ use ReCaptcha\Event\ReCaptchaEvents;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Thelia\Core\Event\Contact\ContactEvent;
-use Thelia\Core\Event\Customer\CustomerCreateOrUpdateEvent;
 use Thelia\Core\Event\TheliaEvents;
+use Thelia\Core\HttpFoundation\Request as TheliaRequest;
 use Thelia\Form\Exception\FormValidationException;
-use Thelia\Model\Event\NewsletterEvent;
 
 class ReCaptchaAction implements EventSubscriberInterface
 {
-    /** @var  Request */
-    protected $request;
-
-    public function __construct(RequestStack $requestStack, private readonly EventDispatcherInterface $eventDispatcher)
+    public function __construct(protected RequestStack $requestStack, private readonly EventDispatcherInterface $eventDispatcher)
     {
-        $this->request = $requestStack->getCurrentRequest();
     }
 
-    public function checkCaptcha(ReCaptchaCheckEvent $event)
+    public function checkCaptcha(ReCaptchaCheckEvent $event): void
     {
+        $request = $this->requestStack->getCurrentRequest();
+
+        if (TheliaRequest::$isAdminEnv) {
+            return;
+        }
+
         $requestUrl = "https://www.google.com/recaptcha/api/siteverify";
 
         $secretKey = ReCaptcha::getConfigValue('secret_key');
@@ -35,26 +34,30 @@ class ReCaptchaAction implements EventSubscriberInterface
 
         $captchaResponse = $event->getCaptchaResponse();
         if (null == $captchaResponse) {
-            $captchaResponse = $this->request->request->get('g-recaptcha-response');
+            $captchaResponse = $request->request->get('g-recaptcha-response');
         }
 
         $requestUrl .= "&response=$captchaResponse";
 
         $remoteIp = $event->getRemoteIp();
         if (null == $remoteIp) {
-            $remoteIp = $this->request->server->get('REMOTE_ADDR');
+            $remoteIp = $request->server->get('REMOTE_ADDR');
         }
 
         $requestUrl .= "&remoteip=$remoteIp";
 
         $result = json_decode(file_get_contents($requestUrl), true);
-        if ($result['success'] == true && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
+        if ($result['success'] && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
             $event->setHuman(true);
         }
     }
 
     public function sendCaptchaEvent(): void
     {
+        if (TheliaRequest::$isAdminEnv) {
+            return;
+        }
+
         $checkCaptchaEvent = new ReCaptchaCheckEvent();
         $this->eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
 
@@ -63,7 +66,7 @@ class ReCaptchaAction implements EventSubscriberInterface
         }
     }
 
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [
             ReCaptchaEvents::CHECK_CAPTCHA_EVENT => ['checkCaptcha', 128],
