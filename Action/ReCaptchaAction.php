@@ -19,6 +19,8 @@ class ReCaptchaAction implements EventSubscriberInterface
 {
     /** @var  Request */
     protected $request;
+    /** @var bool|null */
+    private $captchaVerified = null;
 
     public function __construct(RequestStack $requestStack, private readonly EventDispatcherInterface $eventDispatcher)
     {
@@ -55,10 +57,19 @@ class ReCaptchaAction implements EventSubscriberInterface
 
     public function sendCaptchaEvent(): void
     {
+        if ($this->captchaVerified !== null) {
+            if ($this->captchaVerified === false) {
+                throw new FormValidationException('Invalid captcha');
+            }
+            return;
+        }
+
         $checkCaptchaEvent = new ReCaptchaCheckEvent();
         $this->eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
 
-        if ($checkCaptchaEvent->isHuman() === false) {
+        $this->captchaVerified = $checkCaptchaEvent->isHuman();
+
+        if ($this->captchaVerified === false) {
             throw new FormValidationException('Invalid captcha');
         }
     }
