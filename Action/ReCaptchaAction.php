@@ -29,6 +29,10 @@ class ReCaptchaAction implements EventSubscriberInterface
 
     public function checkCaptcha(ReCaptchaCheckEvent $event)
     {
+        if ($this->captchaVerified !== null) {
+            $event->setHuman($this->captchaVerified);
+            return;
+        }
         $requestUrl = "https://www.google.com/recaptcha/api/siteverify";
 
         $secretKey = ReCaptcha::getConfigValue('secret_key');
@@ -52,24 +56,19 @@ class ReCaptchaAction implements EventSubscriberInterface
         $result = json_decode(file_get_contents($requestUrl), true);
         if ($result['success'] == true && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
             $event->setHuman(true);
+            $this->captchaVerified = true;
+            return;
         }
+
+        $this->captchaVerified = false;
     }
 
     public function sendCaptchaEvent(): void
     {
-        if ($this->captchaVerified !== null) {
-            if ($this->captchaVerified === false) {
-                throw new FormValidationException('Invalid captcha');
-            }
-            return;
-        }
-
         $checkCaptchaEvent = new ReCaptchaCheckEvent();
         $this->eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
 
-        $this->captchaVerified = $checkCaptchaEvent->isHuman();
-
-        if ($this->captchaVerified === false) {
+        if ($checkCaptchaEvent->isHuman() === false) {
             throw new FormValidationException('Invalid captcha');
         }
     }
