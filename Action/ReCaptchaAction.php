@@ -9,8 +9,6 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Thelia\Core\Event\Contact\ContactEvent;
-use Thelia\Core\Event\Customer\CustomerCreateOrUpdateEvent;
 use Thelia\Core\Event\TheliaEvents;
 use Thelia\Form\Exception\FormValidationException;
 use Thelia\Model\Event\NewsletterEvent;
@@ -21,6 +19,7 @@ class ReCaptchaAction implements EventSubscriberInterface
     protected $request;
     /** @var bool|null */
     private $captchaVerified = null;
+    private bool $isAdminEnv = false;
 
     public function __construct(RequestStack $requestStack, private readonly EventDispatcherInterface $eventDispatcher)
     {
@@ -40,14 +39,14 @@ class ReCaptchaAction implements EventSubscriberInterface
         $requestUrl .= "?secret=$secretKey";
 
         $captchaResponse = $event->getCaptchaResponse();
-        if (null == $captchaResponse) {
+        if (null == $captchaResponse && $this->request) {
             $captchaResponse = $this->request->request->get('g-recaptcha-response');
         }
 
         $requestUrl .= "&response=$captchaResponse";
 
         $remoteIp = $event->getRemoteIp();
-        if (null == $remoteIp) {
+        if (null == $remoteIp && $this->request) {
             $remoteIp = $this->request->server->get('REMOTE_ADDR');
         }
 
@@ -65,12 +64,20 @@ class ReCaptchaAction implements EventSubscriberInterface
 
     public function sendCaptchaEvent(): void
     {
+        if ($this->isAdminEnv()) {
+            return;
+        }
         $checkCaptchaEvent = new ReCaptchaCheckEvent();
         $this->eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
 
         if ($checkCaptchaEvent->isHuman() === false) {
             throw new FormValidationException('Invalid captcha');
         }
+    }
+
+    public function isAdminEnv(): bool
+    {
+        return $this->request ? $this->request::$isAdminEnv : false;
     }
 
     public static function getSubscribedEvents()
