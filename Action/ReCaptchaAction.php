@@ -52,11 +52,22 @@ class ReCaptchaAction implements EventSubscriberInterface
 
         $requestUrl .= "&remoteip=$remoteIp";
 
-        $result = json_decode(file_get_contents($requestUrl), true);
-        if ($result['success'] == true && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
-            $event->setHuman(true);
-            $this->captchaVerified = true;
-            return;
+        $curl = curl_init($requestUrl);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        if (is_string($response)) {
+            $result = json_decode($response, true);
+            if (is_array($result)
+                && ($result['success'] ?? false) === true
+                && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
+                $event->setHuman(true);
+                $this->captchaVerified = true;
+                return;
+            }
         }
 
         $this->captchaVerified = false;
