@@ -32,31 +32,49 @@ class ReCaptchaAction implements EventSubscriberInterface
             $event->setHuman($this->captchaVerified);
             return;
         }
-        $requestUrl = "https://www.google.com/recaptcha/api/siteverify";
+
+        if (!function_exists('curl_init')) {
+            $this->captchaVerified = false;
+            return;
+        }
 
         $secretKey = ReCaptcha::getConfigValue('secret_key');
         $minScore = ReCaptcha::getConfigValue('min_score', 0.3);
-        $requestUrl .= "?secret=$secretKey";
 
         $captchaResponse = $event->getCaptchaResponse();
         if (null == $captchaResponse && $this->request) {
             $captchaResponse = $this->request->request->get('g-recaptcha-response');
         }
 
-        $requestUrl .= "&response=$captchaResponse";
-
         $remoteIp = $event->getRemoteIp();
         if (null == $remoteIp && $this->request) {
             $remoteIp = $this->request->server->get('REMOTE_ADDR');
         }
 
-        $requestUrl .= "&remoteip=$remoteIp";
+        $payload = http_build_query([
+            'secret' => (string) $secretKey,
+            'response' => (string) $captchaResponse,
+            'remoteip' => (string) $remoteIp,
+        ]);
 
-        $result = json_decode(file_get_contents($requestUrl), true);
-        if ($result['success'] == true && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
-            $event->setHuman(true);
-            $this->captchaVerified = true;
-            return;
+        $curl = curl_init('https://www.google.com/recaptcha/api/siteverify');
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 3);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 5);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $payload);
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        if (is_string($response)) {
+            $result = json_decode($response, true);
+            if (is_array($result)
+                && ($result['success'] ?? false) === true
+                && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
+                $event->setHuman(true);
+                $this->captchaVerified = true;
+                return;
+            }
         }
 
         $this->captchaVerified = false;
