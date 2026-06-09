@@ -22,6 +22,10 @@ class ConfigurationController extends BaseAdminController
 
     public function viewAction(): Response
     {
+        if (null !== $response = $this->checkAuth([AdminResources::MODULE], 'ReCaptcha', AccessManager::VIEW)) {
+            return $response;
+        }
+
         $form = $this->formFactory->createForm(ConfigurationForm::getName());
 
         return new Response($this->twig->render(
