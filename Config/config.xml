@@ -10,23 +10,11 @@
         -->
     </loops>
 
-    <forms>
-        <form name="recaptcha_configuration_form" class="ReCaptcha\Form\ConfigurationForm" />
-    </forms>
-
     <commands>
         <!--
         <command class="ReCaptcha\Command\MySuperCommand" />
         -->
     </commands>
-
-    <hooks>
-        <hook id="recaptcha.hook" class="ReCaptcha\Hook\FrontHook">
-            <tag name="hook.event_listener" event="main.head-top" type="front" method="loadRecaptcha" />
-            <tag name="hook.event_listener" event="recaptcha.js" type="front" method="loadRecaptcha" />
-            <tag name="hook.event_listener" event="recaptcha.check" type="front" method="addRecaptchaCheck" />
-        </hook>
-    </hooks>
 
     <!--
     <exports>
