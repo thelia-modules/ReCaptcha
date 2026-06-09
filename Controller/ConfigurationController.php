@@ -9,7 +9,7 @@ use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
 use Thelia\Core\Translation\Translator;
-use Thelia\Form\TheliaFormFactory;
+use Thelia\Core\Form\TheliaFormFactory;
 use Twig\Environment;
 
 class ConfigurationController extends BaseAdminController
