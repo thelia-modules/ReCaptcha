@@ -65,6 +65,6 @@ class ConfigurationController extends BaseAdminController
             ));
         }
 
-        return $this->generateSuccessRedirect($form);
+        return $this->generateRedirectFromRoute('admin.recaptcha.config');
     }
 }
