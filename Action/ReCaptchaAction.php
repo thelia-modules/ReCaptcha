@@ -26,28 +26,33 @@ class ReCaptchaAction implements EventSubscriberInterface
             return;
         }
 
-        $requestUrl = "https://www.google.com/recaptcha/api/siteverify";
-
         $secretKey = ReCaptcha::getConfigValue('secret_key');
         $minScore = ReCaptcha::getConfigValue('min_score', 0.3);
-        $requestUrl .= "?secret=$secretKey";
 
         $captchaResponse = $event->getCaptchaResponse();
         if (null == $captchaResponse) {
             $captchaResponse = $request->request->get('g-recaptcha-response');
         }
 
-        $requestUrl .= "&response=$captchaResponse";
-
         $remoteIp = $event->getRemoteIp();
         if (null == $remoteIp) {
             $remoteIp = $request->server->get('REMOTE_ADDR');
         }
 
-        $requestUrl .= "&remoteip=$remoteIp";
+        $requestUrl = "https://www.google.com/recaptcha/api/siteverify?" . http_build_query([
+            'secret'   => $secretKey,
+            'response' => $captchaResponse,
+            'remoteip' => $remoteIp,
+        ]);
 
-        $result = json_decode(file_get_contents($requestUrl), true);
-        if ($result['success'] && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
+        $context = stream_context_create(['http' => ['timeout' => 5]]);
+        $raw = file_get_contents($requestUrl, false, $context);
+        if ($raw === false) {
+            return;
+        }
+
+        $result = json_decode($raw, true);
+        if (is_array($result) && !empty($result['success']) && (!array_key_exists('score', $result) || $result['score'] > $minScore)) {
             $event->setHuman(true);
         }
     }
