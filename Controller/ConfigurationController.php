@@ -36,7 +36,7 @@ class ConfigurationController extends BaseAdminController
 
     public function saveAction(): Response
     {
-        if (null !== $response = $this->checkAuth([AdminResources::MODULE], 'ReCaptcha', AccessManager::VIEW)) {
+        if (null !== $response = $this->checkAuth([AdminResources::MODULE], 'ReCaptcha', AccessManager::UPDATE)) {
             return $response;
         }
 
