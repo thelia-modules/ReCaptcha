@@ -13,13 +13,12 @@
 namespace ReCaptcha;
 
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
-use Thelia\Core\Template\TemplateDefinition;
 use Thelia\Module\BaseModule;
 
 class ReCaptcha extends BaseModule
 {
     /** @var string */
-    const DOMAIN_NAME = 'recaptcha';
+    const string DOMAIN_NAME = 'recaptcha';
 
     /*
      * You may now override BaseModuleInterface methods, such as:
@@ -27,32 +26,6 @@ class ReCaptcha extends BaseModule
      *
      * Have fun !
      */
-
-    public function getHooks() : array
-    {
-        return [
-            [
-                "type" => TemplateDefinition::FRONT_OFFICE,
-                "code" => "recaptcha.js",
-                "title" => [
-                    "en_US" => "reCaptcha js",
-                    "fr_FR" => "Js pour recaptcha",
-                ],
-                "block" => false,
-                "active" => true,
-            ],
-            [
-                "type" => TemplateDefinition::FRONT_OFFICE,
-                "code" => "recaptcha.check",
-                "title" => [
-                    "en_US" => "reCaptcha check hook",
-                    "fr_FR" => "reCaptcha check hook",
-                ],
-                "block" => false,
-                "active" => true,
-            ],
-        ];
-    }
 
     public static function configureServices(ServicesConfigurator $servicesConfigurator): void
     {
