@@ -5,6 +5,7 @@ namespace ReCaptcha\Controller;
 use ReCaptcha\Form\ConfigurationForm;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Thelia\Controller\Admin\BaseAdminController;
 use Thelia\Core\Security\AccessManager;
 use Thelia\Core\Security\Resource\AdminResources;
@@ -12,6 +13,7 @@ use Thelia\Core\Translation\Translator;
 use Thelia\Core\Form\TheliaFormFactory;
 use Twig\Environment;
 
+#[Route('/admin/module', name: 'admin.recaptcha.')]
 class ConfigurationController extends BaseAdminController
 {
     public function __construct(
@@ -20,6 +22,7 @@ class ConfigurationController extends BaseAdminController
     ) {
     }
 
+    #[Route('/ReCaptcha', name: 'config', methods: ['GET'])]
     public function viewAction(): Response
     {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], 'ReCaptcha', AccessManager::VIEW)) {
@@ -29,11 +32,12 @@ class ConfigurationController extends BaseAdminController
         $form = $this->formFactory->createForm(ConfigurationForm::getName());
 
         return new Response($this->twig->render(
-            '@ReCaptchaModule/backOffice/default-twig/recaptcha/configuration.html.twig',
+            '@ReCaptchaModule/backOffice/default-twig/ReCaptcha/configuration.html.twig',
             ['form' => $form->createView()->getView()]
         ));
     }
 
+    #[Route('/ReCaptcha/configuration', name: 'config.save', methods: ['POST'])]
     public function saveAction(): Response
     {
         if (null !== $response = $this->checkAuth([AdminResources::MODULE], 'ReCaptcha', AccessManager::UPDATE)) {
@@ -48,7 +52,6 @@ class ConfigurationController extends BaseAdminController
             ReCaptcha::setConfigValue('site_key', $data['site_key']);
             ReCaptcha::setConfigValue('secret_key', $data['secret_key']);
             ReCaptcha::setConfigValue('min_score', $data['min_score']);
-            ReCaptcha::setConfigValue('captcha_style', $data['captcha_style']);
         } catch (\Exception $e) {
             $this->setupFormErrorContext(
                 Translator::getInstance()->trans('Error', [], ReCaptcha::DOMAIN_NAME),
@@ -57,7 +60,7 @@ class ConfigurationController extends BaseAdminController
             );
 
             return new Response($this->twig->render(
-                '@ReCaptchaModule/backOffice/default-twig/recaptcha/configuration.html.twig',
+                '@ReCaptchaModule/backOffice/default-twig/ReCaptcha/configuration.html.twig',
                 [
                     'form' => $form->createView()->getView(),
                     'form_error_message' => $e->getMessage(),
@@ -65,6 +68,6 @@ class ConfigurationController extends BaseAdminController
             ));
         }
 
-        return $this->generateRedirectFromRoute('admin.recaptcha.config');
+        return $this->generateSuccessRedirect($form);
     }
 }

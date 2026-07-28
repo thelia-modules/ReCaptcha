@@ -12,7 +12,7 @@ use Thelia\Form\BaseForm;
 
 class ConfigurationForm extends BaseForm
 {
-    protected function buildForm()
+    protected function buildForm(): void
     {
         $this->formBuilder
             ->add(
@@ -22,7 +22,10 @@ class ConfigurationForm extends BaseForm
                     "data" => ReCaptcha::getConfigValue("site_key"),
                     "label"=>Translator::getInstance()->trans("Site key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "site_key"],
-                    "required" => true
+                    "required" => true,
+                    "row_attr" => [
+                        "class" => 'col-sm-6'
+                    ]
                 ]
             )
             ->add(
@@ -32,7 +35,10 @@ class ConfigurationForm extends BaseForm
                     "data" => ReCaptcha::getConfigValue("secret_key"),
                     "label"=>Translator::getInstance()->trans("Secret key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "secret_key"],
-                    "required" => true
+                    "required" => true,
+                    "row_attr" => [
+                        "class" => 'col-sm-6'
+                    ]
                 ]
             )
             ->add(
@@ -47,21 +53,6 @@ class ConfigurationForm extends BaseForm
                         "min" => 0.1,
                         "max" => 1,
                         "step" => 0.1
-                    ]
-                ]
-            )
-            ->add(
-                "captcha_style",
-                ChoiceType::class,
-                [
-                    "data" => ReCaptcha::getConfigValue("captcha_style"),
-                    "label"=>Translator::getInstance()->trans("ReCaptcha style", array(), ReCaptcha::DOMAIN_NAME),
-                    "label_attr" => ["for" => "captcha_style"],
-                    "required" => true,
-                    'choices'  => [
-                        'Normal'=>'normal',
-                        'Compact'=>'compact',
-                        'Invisible'=>'invisible'
                     ]
                 ]
             );
