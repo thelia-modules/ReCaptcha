@@ -1,2 +1,4 @@
-<script src="https://www.google.com/recaptcha/api.js?render={{ siteKey }}"></script>
+<script>
+    window.SCRIPTRECAPTCHA = "https://www.google.com/recaptcha/api.js?render={{ siteKey|e('js') }}";
+</script>
 <script src="{{ module_asset('ReCaptcha', 'assets/js/recaptcha.js') }}"></script>

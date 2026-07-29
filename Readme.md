@@ -1,62 +1,61 @@
 # Re Captcha
 
-This module allows you to add easily a reCAPTCHA to your form
+Protects Thelia front forms with Google reCAPTCHA v3.
+
+The check is invisible: visitors never see a challenge or a "select all the traffic
+lights" grid. Google scores each submission in the background, and the module
+rejects those that score too low.
+
 ## Installation
 
-### Composer
-
-Add it in your main thelia composer.json file
-
 ```
-composer require thelia/re-captcha-module:~2.0.0
+composer require thelia/re-captcha-module
 ```
 
-## Usage
+## Configuration
 
-Before using this module you have to create google api key here http://www.google.com/recaptcha/admin  
-next configure your reCAPTCHA access here http://your_site.com`/admin/module/ReCaptcha` with keys you obtained in Google's page 
-and choose which style of captcha you want :
+Create your keys on http://www.google.com/recaptcha/admin (reCAPTCHA **v3**), then
+fill them in the back office, under `/admin/module/ReCaptcha`:
 
-- A standard captcha (or a compact version of this one)
+| Field | Purpose |
+|-------|---------|
+| Site key | public key, used on the front pages |
+| Secret key | private key, used to validate submissions with Google |
+| Captcha minimum score | below this score the submission is rejected (default `0.3`) |
 
-    ![Checkbox captcha](https://developers.google.com/recaptcha/images/newCaptchaAnchor.gif)
+The score runs from `0.0` (almost certainly a bot) to `1.0` (almost certainly a
+human). Raise the minimum to filter harder, lower it if legitimate customers are
+being turned away.
 
-- An invisible captcha
- 
-    ![Invisible captcha](https://developers.google.com/recaptcha/images/invisible_badge.png)
+As long as the two keys are empty the module stays inert: the protected forms keep
+working, with no captcha check at all. Nothing breaks on a store that has not
+signed up with Google yet.
 
+## THELIA 3 upgrade
 
-Then you'll need help from a developer to add some hooks in template and dispatch the check events, see details below.
+The module adds a new “reCAPTCHA” field to the contact and login forms. You can do the same for third-party forms; see the next section.
 
-### Hook
+### Client-side
 
-First if you don't have `{hook name="main.head-top"}` hook in your template you have to put this hook `{hook name="recaptcha.js"}` in the top of your head  
-Then add this hook `{hook name="recaptcha.check"}` in every form where you want to check if the user is human,  
-be careful if you want to use the invisible captcha this hook must be placed directly in the form tag like this :
-```
-<form id="form-contact" action="{url path="/contact"}" method="post">
-    {hook name="recaptcha.check"}
-    // End of the form
-</form>
-```
+On the front end, the module hooks into `theme_hook(‘layout.body.bottom’)`. It adds a JavaScript script that determines whether the user is a robot or not. If the user is indeed a human, it submits the form.
 
-### Event
+### Server-side
 
-To check in server-side if the captcha is valid you have to dispatch the "CHECK_CAPTCHA_EVENT" like this :
-```
-$checkCaptchaEvent = new ReCaptchaCheckEvent();
-$eventDispatcher->dispatch($checkCaptchaEvent, ReCaptchaEvents::CHECK_CAPTCHA_EVENT);
-```
+On the back end, the reCAPTCHA field is a `RecaptchaType` with a constraint that sends a request to Google.
 
-Then the result of check is available in `$checkCaptchaEvent->isHuman()`as boolean so you can do a test like this :
-```
-if ($checkCaptchaEvent->isHuman() == false) {
-    throw new \Exception('Invalid captcha');
-}
-```
-   
-Don't forget to add this use at the top of your class :   
-```
-use ReCaptcha\Event\ReCaptchaCheckEvent;   
-use ReCaptcha\Event\ReCaptchaEvents;
+## Protects the core front-end forms.
+
+To protect another form, do not edit this class: declare the same listener from
+your own bundle or module, or call `ReCaptchaProtection::apply()` directly in your
+own form builder.
+
+```php
+     #[AsEventListener(event: TheliaEvents::FORM_AFTER_BUILD.‘.my_form’)]
+     final class ProtectMyForm
+     {
+         public function __invoke(TheliaFormEvent $event): void
+          {
+              ReCaptchaProtection::apply($event->getForm()->getFormBuilder());
+         }
+     }
 ```
