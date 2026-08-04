@@ -3,8 +3,12 @@
 {% block title %}{{ 'ReCaptcha module configuration'|trans({}, 'recaptcha.bo.default') }}{% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{{ path('admin.module') }}">{{ 'Modules'|trans }}</a></li>
-    <li class="breadcrumb-item active">{{ 'ReCaptcha'|trans({}, 'recaptcha.bo.default') }}</li>
+	<nav aria-label="breadcrumb" class="mb-3">
+		<ol class="breadcrumb">
+			<li class="breadcrumb-item"><a href="{{ path('admin.module') }}">{{ 'Modules'|trans }}</a></li>
+			<li class="breadcrumb-item active">{{ 'ReCaptcha'|trans({}, 'recaptcha.bo.default') }}</li>
+		</ol>
+	</nav>
 {% endblock %}
 
 {% block body_testid %}recaptcha-configuration{% endblock %}
@@ -23,49 +27,25 @@
                 <h4 class="card-title">{{ 'ReCaptcha configuration'|trans({}, 'recaptcha.bo.default') }}</h4>
             </div>
             <div class="card-body">
-                {{ form_start(form, {action: path('admin.recaptcha.config.save'), method: 'post', attr: {}}) }}
+	            {% form_theme form with bo_form_themes only %}
+				{{ form_start(form, {action : path('admin.recaptcha.config.save')}) }}
+	            {% if form_error_message is defined and form_error_message %}
+		            <div class="alert alert-danger">{{ form_error_message }}</div>
+	            {% endif %}
+	            <input type="hidden" name="{{ field_name(form.success_url) }}" value="{{ path('admin.recaptcha.config') }}">
 
-                {% if form_error_message is defined and form_error_message %}
-                    <div class="alert alert-danger">{{ form_error_message }}</div>
-                {% endif %}
-
-                <div class="row">
-                    <h3 class="col-12">{{ 'reCAPTCHA access :'|trans({}, 'recaptcha.bo.default') }}</h3>
-
-                    <div class="col-md-6 mb-3">
-                        {{ form_label(form.site_key) }}
-                        {{ form_widget(form.site_key, {attr: {class: 'form-control'}}) }}
-                        {{ form_errors(form.site_key) }}
-                    </div>
-
-                    <div class="col-md-6 mb-3">
-                        {{ form_label(form.secret_key) }}
-                        {{ form_widget(form.secret_key, {attr: {class: 'form-control'}}) }}
-                        {{ form_errors(form.secret_key) }}
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        {{ form_label(form.captcha_style) }}
-                        {{ form_widget(form.captcha_style, {attr: {class: 'form-select'}}) }}
-                        {{ form_errors(form.captcha_style) }}
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        {{ form_label(form.min_score) }}
-                        {{ form_widget(form.min_score, {attr: {class: 'form-control', min: 0.1, max: 1, step: 0.1}}) }}
-                        {{ form_errors(form.min_score) }}
-                    </div>
-
-                    <div class="col-md-12 mb-3">
-                        <p>{{ 'These infos are available here : '|trans({}, 'recaptcha.bo.default') }}<a href="http://www.google.com/recaptcha/admin">http://www.google.com/recaptcha/admin</a></p>
-                    </div>
-
-                    <div class="col-md-12">
-                        <button type="submit" class="btn btn-success">{{ 'Save'|trans }}</button>
-                    </div>
-                </div>
-
-                {{ form_end(form) }}
+				<fieldset>
+					<div class="row">
+						{{ form_rest(form) }}
+					</div>
+				</fieldset>
+	            <div class="col-md-12 mb-3">
+		            <p>{{ 'These infos are available here : '|trans({}, 'recaptcha.bo.default') }}<a href="http://www.google.com/recaptcha/admin">http://www.google.com/recaptcha/admin</a></p>
+	            </div>
+	            <div class="col-md-12">
+		            <button type="submit" class="btn btn-success">{{ 'Save'|trans }}</button>
+	            </div>
+             	{{ form_end(form) }}
             </div>
         </div>
     </div>
