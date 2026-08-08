@@ -1,10 +1,10 @@
 {
   "name": "thelia/re-captcha-module",
   "description": "This module allows you to add easily a reCAPTCHA to your form",
-  "license": "LGPL-3.0+",
+  "license": "GPL-3.0-or-later",
   "type": "thelia-module",
   "require": {
-    "thelia/installer": "~1.1"
+    "thelia/installer": "^1.6"
   },
   "extra": {
     "installer-name": "ReCaptcha"

@@ -20,7 +20,7 @@
         <language>en_US</language>
         <language>fr_FR</language>
     </languages>
-    <version>4.0.0</version>
+    <version>5.0.0</version>
     <authors>
         <author>
             <name>Vincent Lopes-Vicente</name>
@@ -36,6 +36,6 @@
         <module version="&gt;0.2">HookSearch</module>
     </required>
     -->
-    <thelia>2.5.0</thelia>
-    <stability>other</stability>
+    <thelia>3.0.0</thelia>
+    <stability>prod</stability>
 </module>
