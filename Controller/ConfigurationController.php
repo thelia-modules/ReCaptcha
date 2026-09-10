@@ -32,7 +32,7 @@ class ConfigurationController extends BaseAdminController
         $form = $this->formFactory->createForm(ConfigurationForm::getName());
 
         return new Response($this->twig->render(
-            '@ReCaptchaModule/backOffice/default-twig/ReCaptcha/configuration.html.twig',
+            '@ReCaptchaModule/backOffice/default-twig/recaptcha/configuration.html.twig',
             ['form' => $form->createView()->getView()]
         ));
     }
@@ -60,7 +60,7 @@ class ConfigurationController extends BaseAdminController
             );
 
             return new Response($this->twig->render(
-                '@ReCaptchaModule/backOffice/default-twig/ReCaptcha/configuration.html.twig',
+                '@ReCaptchaModule/backOffice/default-twig/recaptcha/configuration.html.twig',
                 [
                     'form' => $form->createView()->getView(),
                     'form_error_message' => $e->getMessage(),
