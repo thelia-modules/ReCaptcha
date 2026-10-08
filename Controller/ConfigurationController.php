@@ -50,7 +50,9 @@ class ConfigurationController extends BaseAdminController
             $data = $this->validateForm($form)->getData();
 
             ReCaptcha::setConfigValue('site_key', $data['site_key']);
-            ReCaptcha::setConfigValue('secret_key', $data['secret_key']);
+            if (null !== $data['secret_key'] && '' !== trim((string) $data['secret_key'])) {
+                ReCaptcha::setConfigValue('secret_key', trim((string) $data['secret_key']));
+            }
             ReCaptcha::setConfigValue('min_score', $data['min_score']);
         } catch (\Exception $e) {
             $this->setupFormErrorContext(
