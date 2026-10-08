@@ -5,6 +5,7 @@ namespace ReCaptcha\Form;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
@@ -28,14 +29,17 @@ class ConfigurationForm extends BaseForm
                     ]
                 ]
             )
+            // The secret is never sent back to the browser: an empty field keeps the stored one.
             ->add(
                 "secret_key",
-                TextType::class,
+                PasswordType::class,
                 [
-                    "data" => ReCaptcha::getConfigValue("secret_key"),
                     "label"=>Translator::getInstance()->trans("Secret key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "secret_key"],
-                    "required" => true,
+                    "required" => false,
+                    "always_empty" => true,
+                    "help" => Translator::getInstance()->trans("Leave empty to keep the current secret key", array(), ReCaptcha::DOMAIN_NAME),
+                    "attr" => ["autocomplete" => "off"],
                     "row_attr" => [
                         "class" => 'col-sm-6'
                     ]
