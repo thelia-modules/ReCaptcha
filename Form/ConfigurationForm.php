@@ -23,7 +23,9 @@ class ConfigurationForm extends BaseForm
                     "data" => ReCaptcha::getConfigValue("site_key"),
                     "label"=>Translator::getInstance()->trans("Site key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "site_key"],
-                    "required" => true,
+                    // Emptying the site key switches the captcha off: the save then removes both keys.
+                    "required" => false,
+                    "help" => Translator::getInstance()->trans("Leave empty to switch the captcha off (both keys are removed)", array(), ReCaptcha::DOMAIN_NAME),
                     "row_attr" => [
                         "class" => 'col-sm-6'
                     ]
