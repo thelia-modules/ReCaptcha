@@ -5,6 +5,7 @@ namespace ReCaptcha\Form;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Thelia\Core\Translation\Translator;
 use Thelia\Form\BaseForm;
@@ -22,20 +23,25 @@ class ConfigurationForm extends BaseForm
                     "data" => ReCaptcha::getConfigValue("site_key"),
                     "label"=>Translator::getInstance()->trans("Site key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "site_key"],
-                    "required" => true,
+                    // Emptying the site key switches the captcha off: the save then removes both keys.
+                    "required" => false,
+                    "help" => Translator::getInstance()->trans("Leave empty to switch the captcha off (both keys are removed)", array(), ReCaptcha::DOMAIN_NAME),
                     "row_attr" => [
                         "class" => 'col-sm-6'
                     ]
                 ]
             )
+            // The secret is never sent back to the browser: an empty field keeps the stored one.
             ->add(
                 "secret_key",
-                TextType::class,
+                PasswordType::class,
                 [
-                    "data" => ReCaptcha::getConfigValue("secret_key"),
                     "label"=>Translator::getInstance()->trans("Secret key", array(), ReCaptcha::DOMAIN_NAME),
                     "label_attr" => ["for" => "secret_key"],
-                    "required" => true,
+                    "required" => false,
+                    "always_empty" => true,
+                    "help" => Translator::getInstance()->trans("Leave empty to keep the current secret key", array(), ReCaptcha::DOMAIN_NAME),
+                    "attr" => ["autocomplete" => "off"],
                     "row_attr" => [
                         "class" => 'col-sm-6'
                     ]
