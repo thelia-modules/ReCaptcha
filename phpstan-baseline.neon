@@ -1,0 +1,10 @@
+# Thelia CMS is optional: its forms dispatch the event CmsFormSubmissionListener checks, and the
+# listener is never called on a shop without it. The baseline is matched only on such a shop.
+parameters:
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        -
+            message: '#^Parameter \$event of method ReCaptcha\\EventListener\\CmsFormSubmissionListener\:\:check\(\) has invalid type TheliaCMS\\Form\\SubmissionCheckEvent\.$#'
+            identifier: class.notFound
+            count: 1
+            path: EventListener/CmsFormSubmissionListener.php
