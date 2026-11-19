@@ -43,6 +43,22 @@ On the front end, the module hooks into `theme_hook(‘layout.body.bottom’)`. 
 
 On the back end, the reCAPTCHA field is a `RecaptchaType` with a constraint that sends a request to Google.
 
+## Thelia CMS forms
+
+With Thelia CMS 2.36 or later, every form built under **CMS > Forms** is protected too,
+with nothing to configure:
+
+- the hidden reCAPTCHA field is added inside each form by the `cms.form.fields` theme hook
+  (`Hook/Theme/CmsFormFieldsThemeHook.php`); a theme that overrides
+  `cms/partials/form.html.twig` must keep the `theme_hook(fields_hook, …)` line of the module's
+  template;
+- the token is checked when Thelia CMS dispatches its `SubmissionCheckEvent`, once the message
+  has passed its own anti-spam checks and its fields are valid
+  (`EventListener/CmsFormSubmissionListener.php`). A refused message is sent back to the form
+  with what was typed and a sentence asking to send it again.
+
+Thelia CMS is not required: without it, neither class is ever called.
+
 ## Protects the core front-end forms.
 
 To protect another form, do not edit this class: declare the same listener from
